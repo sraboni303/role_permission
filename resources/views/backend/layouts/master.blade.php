@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/default-css.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/css/responsive.css') }}">
+    @yield('style')
     <!-- modernizr css -->
     <script src="{{ asset('backend/assets/js/vendor/modernizr-2.8.3.min.js') }}"></script>
 </head>
@@ -576,6 +577,7 @@
     <!-- others plugins -->
     <script src="{{ asset('backend/assets/js/plugins.js') }}"></script>
     <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
+    @yield('script')
 </body>
 
 </html>

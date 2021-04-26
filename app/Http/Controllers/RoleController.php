@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use function Ramsey\Uuid\v1;
-
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
@@ -18,7 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+        return view('backend.role.index', compact('roles'));
     }
 
     /**
@@ -29,7 +29,8 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::all();
-        return view('backend.role.create', compact('permissions'));
+        $permission_groups = User::getPermissionGroups();
+        return view('backend.role.create', compact('permissions', 'permission_groups'));
     }
 
     /**
@@ -40,10 +41,14 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        // Role::create($request->validated());
-        // return back();
+        $role = Role::create($request->validated());
 
-        return json_encode($request->permission);
+        $permissions = $request->permission;
+
+        if(!empty($permissions)){
+            $role->syncPermissions($permissions);
+        }
+        return back();
     }
 
     /**
