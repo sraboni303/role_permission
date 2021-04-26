@@ -2,6 +2,9 @@
 
 @section('title') Roles List @endsection
 
+@section('allrole')
+class="active"
+@endsection
 @section('content')
 
 
@@ -28,7 +31,10 @@
                                     <tr>
                                         <th scope="row">{{ $role->id }}</th>
                                         <td>{{ $role->name }}</td>
-                                        <td><i class="ti-trash"></i></td>
+                                        <td>
+                                            <i class="ti-trash"></i>
+                                            <a href="{{ route('role.edit', $role->id) }}" class="btn btn-info">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
 

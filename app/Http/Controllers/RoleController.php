@@ -48,6 +48,7 @@ class RoleController extends Controller
         if(!empty($permissions)){
             $role->syncPermissions($permissions);
         }
+        session()->flash('message', 'Role Created Successfully');
         return back();
     }
 
@@ -70,7 +71,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = Role::findById($id);
+        $permissions = Permission::all();
+        $permission_groups = User::getPermissionGroups();
+        return view('backend.role.edit', compact('role', 'permissions', 'permission_groups'));
     }
 
     /**
@@ -82,8 +86,48 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        // Validation Data
+        $request->validate([
+            'name' => 'required|max:100|unique:roles,name,' . $id
+        ], [
+            'name.requried' => 'Please give a role name'
+        ]);
+
+
+        $role = Role::findById($id);
+        $permissions = $request->input('permissions');
+
+        $permissions = $request->permissions;
+
+        if(!empty($permissions)){
+            $role->syncPermissions($permissions);
+        }
+        session()->flash('message', 'Role has been updated Successfully');
+        return back();
     }
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     // Validation Data
+    //     $request->validate([
+    //         'name' => 'required|max:100|unique:roles,name,' . $id
+    //     ], [
+    //         'name.requried' => 'Please give a role name'
+    //     ]);
+
+    //     $role = Role::findById($id);
+    //     $permissions = $request->input('permissions');
+
+    //     if(!empty($permissions)){
+    //         $role->syncPermissions($permissions);
+    //     }
+
+    //     session()->flash('success', 'Role has been updated !!');
+    //     return back();
+    // }
+
 
     /**
      * Remove the specified resource from storage.

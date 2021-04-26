@@ -8,6 +8,9 @@
                 <div class="row">
                     <!-- basic form start -->
                     <div class="col-12 mt-5">
+                        @if (session()->has('message'))
+                            <p class="alert alert-success">{{ session()->get('message') }}</p>
+                        @endif
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="header-title">Create Role</h4>
