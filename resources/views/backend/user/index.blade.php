@@ -31,7 +31,7 @@
                                     <tr>
                                         <td>{{ $user->name }}</td>
                                         <td>
-                                            {{-- <a href="{{ route('role.edit', $role->id) }}" class="btn btn-info btn-sm">Edit</a> --}}
+                                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info btn-sm">Edit</a>
                                             {{--  <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')

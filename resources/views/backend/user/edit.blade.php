@@ -1,6 +1,10 @@
 @extends('backend.layouts.master')
 
-@section('title') Edit Role @endsection
+@section('title') Edit User @endsection
+
+@section('style')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
 @section('content')
     <div class="main-content-inner">
         <div class="row">
@@ -13,52 +17,43 @@
                         @endif
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="header-title">Edit Role</h4>
-                                <form action="{{ route('role.update', $role->id) }}" method="POST">
+                                <h4 class="header-title">Create User</h4>
+                                <form action="{{ route('user.update', $user->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
 
-                                    <div class="form-group">
-                                        <label for="name">Role Name</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ $role->name }}">
-                                        @error('name')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="checkAllPermissions" value="1" {{ App\Models\User::roleHasPermissions($role, $permissions) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="checkAllPermissions">Select All</label>
-                                    </div>
-                                    <hr>
-                                    @php $i = 1; @endphp
-                                    @foreach ($permission_groups as $group)
-                                        @php
-                                            $permissions = App\Models\User::getPermissionsByGroupName($group->name);
-                                            $j = 1;
-                                        @endphp
-
-                                        <div class="row">
-                                            <div class="col-3">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="{{ $i }}Management" value="{{ $group->name }}" onclick="checkPermissionByGroup('role-{{ $i }}-management-checkbox', this)" {{ App\Models\User::roleHasPermissions($role, $permissions) ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="{{ $i }}Management">{{ $group->name }}</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-9 role-{{ $i }}-management-checkbox">
-
-                                                @foreach ($permissions as $permission)
-                                                    <div class="form-check">
-                                                        <input type="checkbox" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }} class="form-check-input" id="checkPermission{{ $permission->id }}" name="permissions[]" value="{{ $permission->name }}" onclick="checkSinglePermission('role-{{ $i }}-management-checkbox', '{{ $i }}Management', {{ count($permissions) }})">
-                                                        <label class="form-check-label" for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
-                                                    </div>
-                                                    @php $j++; @endphp
-
-                                                @endforeach
-                                                <br>
-
-                                            </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 col-sm-12">
+                                            <label for="name">User Name</label>
+                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $user->name }}">
                                         </div>
-                                        @php $i++; @endphp
-                                    @endforeach
+                                        <div class="form-group col-md-6 col-sm-12">
+                                            <label for="email">User Email</label>
+                                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email" value="{{ $user->email }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 col-sm-12">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                                        </div>
+                                        <div class="form-group col-md-6 col-sm-12">
+                                            <label for="password_confirmation">Confirm Password</label>
+                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Enter Password">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 col-sm-12">
+                                            <label for="password">Assign Roles</label>
+                                            <select name="roles[]" id="roles" class="form-control select2" multiple>
+                                                @foreach ($roles as $role)
+                                                    <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Submit</button>
                                 </form>
@@ -73,55 +68,10 @@
 @endsection
 
 @section('script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-
-        $("#checkAllPermissions").click(function(){
-
-            if ($(this).is(':checked')) {
-                // check all the checkbox
-                $('input[type=checkbox]').prop('checked',true);
-            }else{
-                // uncheck all the checkbox
-                $('input[type=checkbox]').prop('checked',false);
-            }
-
-        });
-
-        function checkPermissionByGroup(className, checkThis){
-            const groupIdName = $("#"+checkThis.id);
-            const classCheckBox = $('.'+className+' input');
-            if(groupIdName.is(':checked')){
-                 classCheckBox.prop('checked', true);
-             }else{
-                 classCheckBox.prop('checked', false);
-             }
-            implementAllChecked();
-         }
-
-         function checkSinglePermission(groupClassName, groupID, countTotalPermission) {
-            const classCheckbox = $('.'+groupClassName+ ' input');
-            const groupIDCheckBox = $("#"+groupID);
-            // if there is any occurance where something is not selected then make selected = false
-            if($('.'+groupClassName+ ' input:checked').length == countTotalPermission){
-                groupIDCheckBox.prop('checked', true);
-            }else{
-                groupIDCheckBox.prop('checked', false);
-            }
-            implementAllChecked();
-         }
-
-
-         function implementAllChecked() {
-             const countPermissions = {{ count($permissions) }};
-             const countPermissionGroups = {{ count($permission_groups) }};
-            //  console.log((countPermissions + countPermissionGroups));
-            //  console.log($('input[type="checkbox"]:checked').length);
-             if($('input[type="checkbox"]:checked').length >= (countPermissions + countPermissionGroups)){
-                $("#checkAllPermissions").prop('checked', true);
-            }else{
-                $("#checkAllPermissions").prop('checked', false);
-            }
-         }
-
+        $(document).ready(function() {
+            $('.select2').select2();
+        })
     </script>
 @endsection
