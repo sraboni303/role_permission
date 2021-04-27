@@ -19,28 +19,43 @@
                     <div class="table-responsive">
                         <table class="table text-center">
                             <thead class="text-uppercase bg-primary">
-                                <tr class="text-white">
-                                    <th width="20%">Name</th>
-                                    <th width="60%">Role</th>
-                                    <th width="20%">Action</th>
+                                <tr>
+                                    <th width="5%">Sl</th>
+                                    <th width="10%">Name</th>
+                                    <th width="10%">Email</th>
+                                    <th width="40%">Roles</th>
+                                    <th width="15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 @foreach ($users as $user)
                                     <tr>
+                                        <td>{{ $loop->index+1 }}</td>
                                         <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
                                         <td>
-                                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-info btn-sm">Edit</a>
-                                            {{--  <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form> --}}
+                                            @foreach ($user->roles as $role)
+                                                <span class="badge badge-info mr-1">
+                                                    {{ $role->name }}
+                                                </span>
+                                            @endforeach
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <a class="btn btn-success text-white" href="{{ route('user.edit', $user->id) }}">Edit</a>
+
+                                            <a class="btn btn-danger text-white" href="{{ route('user.destroy', $user->id) }}"
+                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
+                                                Delete
+                                            </a>
+
+                                            <form id="delete-form-{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}" method="POST" style="display: none;">
+                                                @method('DELETE')
+                                                @csrf
+                                            </form>
+                                        </td>
                                     </tr>
-                                @endforeach
+                               @endforeach
 
                             </tbody>
                         </table>
