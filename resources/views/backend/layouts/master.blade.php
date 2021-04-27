@@ -58,15 +58,19 @@
                                 </ul>
                             </li>
 
-
-
-
-
                             <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout-sidebar-left"></i><span>Roles</span></a>
                                 <ul class="collapse {{ Route::is('role.index') || Route::is('role.create') ? 'in' : '' }}">
                                     <li class="{{ request()->routeIs('role.index') ? 'active' : '' }}"><a href="{{ route('role.index') }}">All Roles</a></li>
                                     <li class="{{ request()->routeIs('role.create') ? 'active' : '' }}"><a href="{{ route('role.create') }}">Create</a></li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout-sidebar-left"></i><span>Users</span></a>
+                                <ul class="collapse {{ Route::is('user.index') || Route::is('user.create') ? 'in' : '' }}">
+                                    <li class="{{ request()->routeIs('user.index') ? 'active' : '' }}"><a href="{{ route('user.index') }}">All Users</a></li>
+                                    <li class="{{ request()->routeIs('user.create') ? 'active' : '' }}"><a href="{{ route('user.create') }}">Create</a></li>
                                 </ul>
                             </li>
 
