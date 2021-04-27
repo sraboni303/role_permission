@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
@@ -30,4 +31,15 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+
+    // Login Routes
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login/submit', [LoginController::class, 'login'])->name('admin.login.submit');
+
+    // Logout Routes
+    Route::post('/logout/submit', [LoginController::class, 'logout'])->name('admin.logout.submit');
+
+    // Forget Password Route
+    Route::get('/password/reset', [ForgetPasswordController::class, 'showLinkRequestForm'])->name('admin.password.request');
+    Route::get('/password/reset/submit', [ForgetPasswordController::class, 'reset'])->name('admin.password.update');
 });

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,5 +38,38 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    public function login(Request $request)
+    {
+        // Validate Login Data
+        $request->validate([
+            'email' => 'required|max:50',
+            'password' => 'required',
+        ]);
+
+        // Attempt to login
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+            // Redirect to dashboard
+            session()->flash('message', 'Successully Logged in !');
+            return redirect()->intended(route('admin.dashboard'));
+        } else {
+            // Search using username
+            if (Auth::guard('admin')->attempt(['username' => $request->email, 'password' => $request->password], $request->remember)) {
+                session()->flash('message', 'Successully Logged in !');
+                return redirect()->intended(route('admin.dashboard'));
+            }
+            // error
+            session()->flash('message', 'Invalid email and password');
+            return back();
+        }
+    }
+
+
+    public function logout()
+    {
+        Auth::guard('admin')->logout();
+        return redirect()->route('admin.login');
     }
 }
