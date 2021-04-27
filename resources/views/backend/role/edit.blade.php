@@ -47,7 +47,7 @@
 
                                                 @foreach ($permissions as $permission)
                                                     <div class="form-check">
-                                                        <input type="checkbox" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }} class="form-check-input" id="checkPermission{{ $permission->id }}" name="permissions[]" value="{{ $permission->name }}" onclick="checkSinglePermission()">
+                                                        <input type="checkbox" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }} class="form-check-input" id="checkPermission{{ $permission->id }}" name="permissions[]" value="{{ $permission->name }}" onclick="checkSinglePermission('role-{{ $i }}-management-checkbox', '{{ $i }}Management', {{ count($permissions) }})">
                                                         <label class="form-check-label" for="checkPermission{{ $permission->id }}">{{ $permission->name }}</label>
                                                     </div>
                                                     @php $j++; @endphp
@@ -95,7 +95,32 @@
              }else{
                  classCheckBox.prop('checked', false);
              }
-            // implementAllChecked();
+            implementAllChecked();
+         }
+
+         function checkSinglePermission(groupClassName, groupID, countTotalPermission) {
+            const classCheckbox = $('.'+groupClassName+ ' input');
+            const groupIDCheckBox = $("#"+groupID);
+            // if there is any occurance where something is not selected then make selected = false
+            if($('.'+groupClassName+ ' input:checked').length == countTotalPermission){
+                groupIDCheckBox.prop('checked', true);
+            }else{
+                groupIDCheckBox.prop('checked', false);
+            }
+            implementAllChecked();
+         }
+
+
+         function implementAllChecked() {
+             const countPermissions = {{ count($permissions) }};
+             const countPermissionGroups = {{ count($permission_groups) }};
+            //  console.log((countPermissions + countPermissionGroups));
+            //  console.log($('input[type="checkbox"]:checked').length);
+             if($('input[type="checkbox"]:checked').length >= (countPermissions + countPermissionGroups)){
+                $("#checkAllPermissions").prop('checked', true);
+            }else{
+                $("#checkAllPermissions").prop('checked', false);
+            }
          }
 
     </script>
