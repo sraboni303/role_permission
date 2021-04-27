@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+    Route::resource('admin', AdminController::class, ['names' => 'admin.admins']);
 
     // Login Routes
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
