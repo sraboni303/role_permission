@@ -127,6 +127,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        if (!is_null($user)) {
+            $user->delete();
+        }
+
+        session()->flash('message', 'User has been deleted !!');
+        return back();
     }
 }

@@ -44,15 +44,12 @@
                                         <td>
                                             <a class="btn btn-success text-white" href="{{ route('user.edit', $user->id) }}">Edit</a>
 
-                                            <a class="btn btn-danger text-white" href="{{ route('user.destroy', $user->id) }}"
-                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
-                                                Delete
-                                            </a>
-
-                                            <form id="delete-form-{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}" method="POST" style="display: none;">
-                                                @method('DELETE')
+                                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline-block">
                                                 @csrf
+                                                @method('DELETE')
+                                                <button onclick="return confirm('Are You Sure?')" type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
+
                                         </td>
                                     </tr>
                                @endforeach
