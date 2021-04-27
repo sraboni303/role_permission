@@ -64,7 +64,7 @@
 
                             <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout-sidebar-left"></i><span>Roles</span></a>
-                                <ul class="collapse">
+                                <ul class="collapse {{ Route::is('role.index') || Route::is('role.create') ? 'in' : '' }}">
                                     <li class="{{ request()->routeIs('role.index') ? 'active' : '' }}"><a href="{{ route('role.index') }}">All Roles</a></li>
                                     <li class="{{ request()->routeIs('role.create') ? 'active' : '' }}"><a href="{{ route('role.create') }}">Create</a></li>
                                 </ul>
