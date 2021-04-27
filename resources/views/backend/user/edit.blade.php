@@ -25,33 +25,38 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-6 col-sm-12">
                                             <label for="name">User Name</label>
-                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" value="{{ $user->name }}">
+                                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Enter Name" value="{{ $user->name }}">
+                                            @error('name')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                         <div class="form-group col-md-6 col-sm-12">
                                             <label for="email">User Email</label>
-                                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email" value="{{ $user->email }}">
+                                            <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter Email" value="{{ $user->email }}">
+                                            @error('email')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
 
                                     <div class="form-row">
                                         <div class="form-group col-md-6 col-sm-12">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter Password">
+                                            @error('password')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                         <div class="form-group col-md-6 col-sm-12">
                                             <label for="password_confirmation">Confirm Password</label>
-                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Enter Password">
+                                            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Enter Password">
+                                            @error('password_confirmation')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span> @enderror
                                         </div>
                                     </div>
 
                                     <div class="form-row">
                                         <div class="form-group col-md-6 col-sm-12">
                                             <label for="password">Assign Roles</label>
-                                            <select name="roles[]" id="roles" class="form-control select2" multiple>
+                                            <select name="roles[]" id="roles" class="form-control select2 @error('roles') is-invalid @enderror" multiple>
                                                 @foreach ($roles as $role)
                                                     <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('roles')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
 

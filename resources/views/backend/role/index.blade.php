@@ -42,7 +42,7 @@
                                             <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <button onclick="return confirm('Are You Sure?')" type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
 
 
