@@ -46,14 +46,6 @@ class UserController extends Controller
         ]);
 
         // Create New User
-
-        // User::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'password' => bcrypt($request->password),
-        // ]);
-
-        // Create New User
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
