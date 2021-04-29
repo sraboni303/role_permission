@@ -43,9 +43,9 @@ class RoleController extends Controller
     {
         $role = Role::create($request->validated());
 
-        $permissions = $request->permission;
+        $permissions = $request->permissions;
 
-        if(!empty($permissions)){
+        if($permissions){
             $role->syncPermissions($permissions);
         }
         session()->flash('message', 'Role Created Successfully');
@@ -100,7 +100,9 @@ class RoleController extends Controller
 
         $permissions = $request->permissions;
 
-        if(!empty($permissions)){
+        if($permissions){
+            $role->name = $request->name;
+            $role->save();
             $role->syncPermissions($permissions);
         }
         session()->flash('message', 'Role has been updated Successfully');
