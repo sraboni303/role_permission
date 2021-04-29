@@ -5,9 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    // public $user;
+
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         $this->user = Auth::guard('web')->user();
+    //         return $next($request);
+    //     });
+    // }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +28,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        // if (is_null($this->user) || !$this->user->can('admin.view')) {
+        //     abort(403, 'Sorry !! You are Unauthorized to view any admin !');
+        // }
+
         $users = User::all();
         return view('backend.user.index', compact('users'));
     }

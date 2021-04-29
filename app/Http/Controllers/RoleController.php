@@ -5,11 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoleRequest;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+
+    public $user;
+
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+            $this->user = Auth::guard('web')->user();
+            return $next($request);
+        });
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +30,10 @@ class RoleController extends Controller
      */
     public function index()
     {
+        // if(is_null($this->user) || !$this->user->can('profile.view')){
+        //     abort(403, "You can't view any role");
+        // }
+
         $roles = Role::all();
         return view('backend.role.index', compact('roles'));
     }
@@ -28,6 +45,10 @@ class RoleController extends Controller
      */
     public function create()
     {
+        // if(is_null($this->user) || !$this->user->can('role.create')){
+        //     abort(403, "You can't create any role!");
+        // }
+
         $permissions = Permission::all();
         $permission_groups = User::getPermissionGroups();
         return view('backend.role.create', compact('permissions', 'permission_groups'));
@@ -41,6 +62,10 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        // if(is_null($this->user) || !$this->user->can('role.create')){
+        //     abort(403, "You can't create any role!");
+        // }
+
         $role = Role::create($request->validated());
 
         $permissions = $request->permissions;
@@ -71,6 +96,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        if(is_null($this->user) || !$this->user->can('role.edit')){
+            abort(403, "You can't edit any role!");
+        }
+
         $role = Role::findById($id);
         $permissions = Permission::all();
         $permission_groups = User::getPermissionGroups();
@@ -86,6 +115,10 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(is_null($this->user) || !$this->user->can('role.create')){
+            abort(403, "You can't create any role!");
+        }
+
 
         // Validation Data
         $request->validate([
@@ -117,6 +150,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        if(is_null($this->user) || !$this->user->can('role.delete')){
+            abort(403, "You can't delete any role!");
+        }
+
         $role = Role::findById($id);
         if(!is_null($role)){
             $role->delete();

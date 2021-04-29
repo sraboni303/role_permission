@@ -22,7 +22,9 @@
                                 <tr class="text-white">
                                     <th width="20%">Name</th>
                                     <th width="60%">Permissions</th>
-                                    <th width="20%">Action</th>
+                                    {{-- @if (Auth::guard('web')->user()->can('role.edit') || Auth::user()->can('role.delete')) --}}
+                                        <th width="20%">Action</th>
+                                    {{-- @endif --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,14 +40,17 @@
                                             @endforeach
                                         </td>
                                         <td>
-                                            <a href="{{ route('role.edit', $role->id) }}" class="btn btn-info btn-sm">Edit</a>
-                                            <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button onclick="return confirm('Are You Sure?')" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
+                                            {{-- @if (Auth::guard('web')->user()->can('role.edit')) --}}
+                                                <a href="{{ route('role.edit', $role->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                            {{-- @endif
 
-
+                                            @if (Auth::guard('web')->user()->can('role.delete')) --}}
+                                                <form action="{{ route('role.destroy', $role->id) }}" method="POST" class="d-inline-block">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button onclick="return confirm('Are You Sure?')" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            {{-- @endif --}}
                                         </td>
                                     </tr>
                                 @endforeach
